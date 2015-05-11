@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="Product">
+
+  <resultMap type="hunet.shop.product.logic.Product" id="ProductResult">
+    <id property="productId" column="PRODUCT_ID"/>
+    <result property="categoryId" column="CATEGORY_ID"/>
+    <result property="brand" column="BRAND"/>
+    <result property="productName" column="PRODUCT_NAME"/>
+    <result property="productNameEng" column="PRODUCT_NAME_ENG"/>
+    <result property="productCode" column="PRODUCT_CODE"/>
+    <result property="price" column="PRICE"/>
+    <result property="imageUser" column="IMAGE_USER"/>
+    <result property="imageSystem" column="IMAGE_SYSTEM"/>
+    <result property="discount" column="DISCOUNT"/>
+    <result property="pointRate" column="POINT_RATE"/>
+    <result property="summary" column="SUMMARY"/>
+    <result property="detail" column="DETAIL"/>
+    <result property="mobileDetail" column="MOBILE_DETAIL"/>
+    <result property="stateId" column="STATE_ID"/>
+    <result property="hasOption" column="HAS_OPTION"/>
+    <result property="storage" column="STORAGE"/>
+    <result property="hit" column="HIT"/>
+  </resultMap>
+  
+  <!-- 상품 리스트 -->
+  <select id="selectAllProduct" resultMap="ProductResult">
+    select PRODUCT_ID, BRAND, PRODUCT_NAME, PRODUCT_NAME_ENG, PRICE, REGIST_TIME
+    from PRODUCT
+  </select>
+  
+  <!-- 상품 상세 -->
+  <select id="selectProductById" resultMap="ProductResult">
+    select PRODUCT_ID, BRAND, PRODUCT_NAME, PRODUCT_NAME_ENG, PRODUCT_CODE, PRICE, IMAGE_USER, 
+    DISCOUNT, POINT_RATE, SUMMARY, DETAIL, MOBILE_DETAIL, STATE_ID, HAS_OPTION, REGIST_TIME
+    from PRODUCT
+    where PRODUCT_ID = #{productId}
+  </select>
+  
+  <!-- 상품 검색 
+  <select id="selectAllProductByName" resultMap="ProductResult">
+    select PRODUCT_ID, BRAND, PRODUCT_NAME, PRODUCT_NAME_ENG, PRICE, SUMMARY, DETAIL, REGIST_TIME
+    from PRODUCT
+    where PRODUCT_NAME LIKE CONCAT('%',#{productName},'%')
+  </select>-->
+  
+  <!-- 상품 검색 -->
+  <select id="searchProduct" parameterType="hunet.shop.product.logic.Product" resultMap="ProductResult">
+		select PRODUCT_ID, BRAND, PRODUCT_NAME, PRODUCT_NAME_ENG, PRICE, REGIST_TIME
+		from PRODUCT where STATE_ID = 0
+		<if test="srchProductName!= ''">AND PRODUCT_NAME = #{srchProductName}</if>
+		<if test="productNameEng!= null">AND PRODUCT_NAME_ENG = #{productNameEng}</if>
+		<if test="brand!= null">AND BRAND = #{brand}</if>
+		<if test="srchProductCode!= ''">AND PRODUCT_CODE = #{srchProductCode}</if>
+		<if test="price!= 0">AND PRICE = #{price}</if>
+		<if test="imageUser!= null">AND IMAGE_USER = #{imageUser}</if>
+		<if test="discount!= 0">AND DISCOUNT = #{discount}</if>
+		<if test="pointRate!= 0">AND POINT_RATE = #{pointRate}</if>
+		<if test="summary!= null">AND SUMMARY = #{summary}</if>
+		<if test="detail!= null">AND DETAIL = #{detail}</if>
+		<if test="mobileDetail!= null">AND MOBILE_DETAIL = #{mobileDetail}</if>
+		<if test="stateId!= 0">AND STATE_ID = #{stateId}</if>
+		<if test="hasOption!= 0">AND HAS_OPTION = #{hasOption}</if>
+		<if test="storage!= 0">AND STORAGE = #{storage}</if>
+  </select>
+  
+  <!-- 상품 등록 -->
+  <insert id="insertProduct" parameterType="hunet.shop.product.logic.Product">
+		insert into PRODUCT (
+		CATEGORY_ID,
+		BRAND,
+		PRODUCT_NAME,
+		PRODUCT_NAME_ENG,
+		PRODUCT_CODE,
+		PRICE,
+		IMAGE_USER,
+		IMAGE_SYSTEM,
+		DISCOUNT,
+		POINT_RATE,
+		SUMMARY,
+		DETAIL,
+		MOBILE_DETAIL,
+		STATE_ID,
+		HAS_OPTION,
+		STORAGE,
+		REGIST_TIME,
+		HIT )
+		values ( #{categoryId}, #{brand}, #{productName}, #{productNameEng}, #{productCode}, 
+		#{price}, #{imageUser}, #{imageSystem}, #{discount}, #{pointRate}, #{summary}, #{detail},  
+		#{mobileDetail}, #{stateId}, #{hasOption}, #{storage}, #{registTime}, #{hit} )
+		<selectKey resultType="int" keyProperty="productId" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+  </insert>
+  
+  	<!-- 이미지 업로드파일명 반영 -->
+	<update id="updateProductImageName" parameterType="hunet.shop.product.logic.Product">
+		update PRODUCT set IMAGE_USER = #{imageUser}, IMAGE_SYSTEM = #{imageSystem}
+	  	where PRODUCT_ID = #{productId}
+	</update>
+	
+	<!-- 상품 편집 -->
+	<update id="updateProduct" parameterType="hunet.shop.product.logic.Product">
+		update PRODUCT
+		<set>
+			<if test="productName!= null">PRODUCT_NAME = #{productName}</if>
+			<if test="productNameEng!= null">,PRODUCT_NAME_ENG = #{productNameEng}</if>
+			<if test="brand!= null">,BRAND = #{brand}</if>
+			<if test="productCode!= null">,PRODUCT_CODE = #{productCode}</if>
+			<if test="price!= null">,PRICE = #{price}</if>
+			<if test="imageUser!= null">,IMAGE_USER = #{imageUser}</if>
+			<if test="discount!= null">,DISCOUNT = #{discount}</if>
+			<if test="pointRate!= null">,POINT_RATE = #{pointRate}</if>
+			<if test="summary!= null">,SUMMARY = #{summary}</if>
+			<if test="detail!= null">,DETAIL = #{detail}</if>
+			<if test="mobileDetail!= null">,MOBILE_DETAIL = #{mobileDetail}</if>
+			<if test="stateId!= null">,STATE_ID = #{stateId}</if>
+			<if test="hasOption!= null">,HAS_OPTION = #{hasOption}</if>
+			<if test="storage!= null">,STORAGE = #{storage}</if>
+		</set>
+	  	where PRODUCT_ID = #{productId}
+	</update>
+	
+
+	
+	<!-- 상품 삭제 -->
+	<delete id="deleteProduct" parameterType="Integer">
+		delete from PRODUCT
+		where PRODUCT_ID = #{productId}
+	</delete>
+  
+</mapper>

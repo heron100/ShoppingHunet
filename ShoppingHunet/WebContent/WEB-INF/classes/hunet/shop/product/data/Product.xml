@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="Product">
+
+  <resultMap type="hunet.shop.product.logic.Product" id="ProductResult">
+    <id property="productId" column="PRODUCT_ID"/>
+    <result property="categoryId" column="CATEGORY_ID"/>
+    <result property="brand" column="BRAND"/>
+    <result property="productName" column="PRODUCT_NAME"/>
+    <result property="productNameEng" column="PRODUCT_NAME_ENG"/>
+    <result property="productCode" column="PRODUCT_CODE"/>
+    <result property="price" column="PRICE"/>
+    <result property="discount" column="DISCOUNT"/>
+    <result property="pointRate" column="POINT_RATE"/>
+    <result property="summary" column="SUMMARY"/>
+    <result property="detail" column="DETAIL"/>
+    <result property="mobileDetail" column="MOBILE_DETAIL"/>
+    <result property="stateId" column="STATE_ID"/>
+    <result property="hasOption" column="HAS_OPTION"/>
+    <result property="storage" column="STORAGE"/>
+    <result property="registTime" column="REGIST_TIME"/>
+    <result property="hit" column="HIT"/>
+  </resultMap>
+  
+  <select id="selectAllProduct" resultMap="ProductResult">
+    select PRODUCT_ID, PRODUCT_NAME, PRODUCT_NAME_ENG, PRICE, REGIST_TIME
+    from PRODUCT
+  </select>
+  
+</mapper>
