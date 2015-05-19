@@ -6,7 +6,7 @@
 </head>
 <body>
 <div align="center" class="body">
-<h2>Main화면</h2>
+<h2>Main화면-GitTEST(20150519)s</h2>
 <form:form method="POST" action="index.do">
 	상품명 검색<input type="text" name="productName"/><input type="submit" value="검색"/>
 	<table border="1">
