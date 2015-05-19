@@ -6,7 +6,7 @@
 </head>
 <body>
 <div align="center" class="body">
-<h2>상품 상세 화면</h2>
+<h2>상품 상세 화면Git</h2>
 <table>
 	<tr>
 		<td><img alt="상품이미지" src="img/${product.imageSystem}"></td>
